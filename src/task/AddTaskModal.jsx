@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddTaskModal({ onSave, taskToUpdate }) {
+export default function AddTaskModal({ onSave, taskToUpdate, onCloseClick }) {
   const [task, setTask] = useState(
     taskToUpdate || {
       id: crypto.randomUUID(),
@@ -30,84 +30,210 @@ export default function AddTaskModal({ onSave, taskToUpdate }) {
 
   return (
     <>
-      <div className="top-0 left-0 bg-black bg-opacity-70 w-full z-10 absolute  "></div>
-      <form className="z-10 absolute top-1/4 left-1/3 mx-auto my-10 w-full max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11">
-        <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
-          {isAdd ? "Add New Task" : "Update Task"}
-        </h2>
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 animate-fade-in"></div>
 
-        <div className="space-y-9 text-white lg:space-y-10">
-          <div className="space-y-2 lg:space-y-3">
-            <label htmlFor="title">Title</label>
-            <input
-              className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
-              type="text"
-              name="title"
-              id="title"
-              value={task.title}
-              onChange={handleChange}
-              required
-            />
+      {/* Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-scale-in">
+        <div className="w-full max-w-2xl bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="relative bg-gradient-to-r from-gray-800/50 to-gray-900/50 px-8 py-6 border-b border-gray-700/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-white">
+                  {isAdd ? "Add New" : "Update"}{" "}
+                  <span className="font-thin text-gray-400">Task</span>
+                </h2>
+              </div>
+
+              <button
+                onClick={onCloseClick}
+                className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700/50 transition-all duration-200"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div className="space-y-2 lg:space-y-3">
-            <label htmlFor="description">Description</label>
-            <textarea
-              className="block min-h-[120px] w-full rounded-md bg-[#2D323F] px-3 py-2.5 lg:min-h-[180px]"
-              type="text"
-              name="description"
-              id="description"
-              value={task.description}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
-          <div className="grid-cols-2 gap-x-4 max-md:space-y-9 md:grid lg:gap-x-10 xl:gap-x-20">
-            <div className="space-y-2 lg:space-y-3">
-              <label htmlFor="tags">Tags</label>
+
+          {/* Form */}
+          <div className="px-8 py-6 space-y-6">
+            {/* Title Field */}
+            <div className="space-y-2">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-300"
+              >
+                Task Title
+              </label>
               <input
-                className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
+                className="block w-full rounded-xl bg-gray-800/50 border border-gray-700/50 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
                 type="text"
-                name="tags"
-                id="tags"
-                value={task.tags}
+                name="title"
+                id="title"
+                placeholder="Enter task title..."
+                value={task.title}
                 onChange={handleChange}
                 required
               />
             </div>
-            <div className="space-y-2 lg:space-y-3">
-              <label htmlFor="priority">Priority</label>
-              <select
-                className="block w-full cursor-pointer rounded-md bg-[#2D323F] px-3 py-2.5"
-                name="priority"
-                id="priority"
-                value={task.priority}
+
+            {/* Description Field */}
+            <div className="space-y-2">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-300"
+              >
+                Description
+              </label>
+              <textarea
+                className="block min-h-[120px] w-full rounded-xl bg-gray-800/50 border border-gray-700/50 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 backdrop-blur-sm resize-none"
+                name="description"
+                id="description"
+                placeholder="Describe your task in detail..."
+                value={task.description}
                 onChange={handleChange}
                 required
+              />
+            </div>
+
+            {/* Tags and Priority Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Tags Field */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="tags"
+                  className="block text-sm font-medium text-gray-300"
+                >
+                  Tags
+                </label>
+                <input
+                  className="block w-full rounded-xl bg-gray-800/50 border border-gray-700/50 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
+                  type="text"
+                  name="tags"
+                  id="tags"
+                  placeholder="work, urgent, project"
+                  value={task.tags}
+                  onChange={handleChange}
+                  required
+                />
+                <p className="text-xs text-gray-500">
+                  Separate tags with commas
+                </p>
+              </div>
+
+              {/* Priority Field */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="priority"
+                  className="block text-sm font-medium text-gray-300"
+                >
+                  Priority Level
+                </label>
+                <select
+                  className="block w-full rounded-xl bg-gray-800/50 border border-gray-700/50 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all duration-300 backdrop-blur-sm cursor-pointer"
+                  name="priority"
+                  id="priority"
+                  value={task.priority}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" disabled className="text-gray-400">
+                    Select Priority
+                  </option>
+                  <option value="Low" className="bg-gray-800">
+                    🟢 Low
+                  </option>
+                  <option value="Medium" className="bg-gray-800">
+                    🟡 Medium
+                  </option>
+                  <option value="High" className="bg-gray-800">
+                    🔴 High
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-4 pt-6 border-t border-gray-700/50">
+              <button
+                onClick={onCloseClick}
+                type="button"
+                className="px-6 py-3 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 hover:text-white font-medium rounded-xl border border-gray-700/50 hover:border-gray-600/50 transition-all duration-200 backdrop-blur-sm"
               >
-                <option value="">Select Priority</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
+                Cancel
+              </button>
+              <button
+                onClick={() => onSave(task, isAdd)}
+                type="button"
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 flex items-center space-x-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>{isAdd ? "Create Task" : "Update Task"}</span>
+              </button>
             </div>
           </div>
         </div>
-        <div className="mt-16 flex justify-center lg:mt-20">
-          <button
-            onClick={() => onSave(task, isAdd)}
-            type="submit"
-            className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-          >
-            Save new Task
-          </button>
-          <button
-            onClick={onCloseClick}
-            className="rounded bg-red-600 px-4 py-2 text-white transition-all hover:opacity-80"
-          >
-            Close
-          </button>
-        </div>
-      </form>
+      </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes scale-in {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out;
+        }
+      `}</style>
     </>
   );
 }

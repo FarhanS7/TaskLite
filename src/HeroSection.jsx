@@ -157,20 +157,7 @@ const Hero = () => {
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
             }`}
-          >
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">10K+</div>
-              <div className="text-gray-400 text-sm">Active Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">500K+</div>
-              <div className="text-gray-400 text-sm">Tasks Completed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white mb-1">99.9%</div>
-              <div className="text-gray-400 text-sm">Uptime</div>
-            </div>
-          </div>
+          ></div>
         </div>
       </div>
 
