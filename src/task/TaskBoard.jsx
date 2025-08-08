@@ -7,7 +7,7 @@ import TaskList from "./TaskList";
 export default function TaskBoard() {
   const defaultTasks = {
     id: 1,
-    title: "Task asdfas",
+    title: "Task ",
     description: "Description for Task 1",
     tags: ["tag1", "tag2"],
     priority: "High",
@@ -20,10 +20,15 @@ export default function TaskBoard() {
     setShowAddModal(true);
   }
 
+  function handleSaveTask(newTask) {
+    setTasks([...tasks, newTask]);
+    setShowAddModal(false);
+  }
+
   return (
     <>
       <section className="mb-20" id="tasks">
-        {showAddModal && <AddTaskModal />}
+        {showAddModal && <AddTaskModal onSave={handleSaveTask} />}
         <div className="container">
           <div className="p-2 flex justify-end">
             <SearchTask />
