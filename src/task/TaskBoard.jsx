@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddTaskModal from "./AddTaskModal";
+import { NoTaskFound } from "./NoTaskFound";
 import { SearchTask } from "./SearchTask";
 import { TaskActions } from "./TaskActions";
 import TaskList from "./TaskList";
@@ -64,6 +65,19 @@ export default function TaskBoard() {
     newTasks[taskIndex].isFavorite = !newTasks[taskIndex].isFavorite;
   }
 
+  function handleSearch(searchTerm) {
+    console.log("Search term:", searchTerm);
+    const filteredTasks = tasks.filter((task) => {
+      return (
+        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.tags.some((tag) =>
+          tag.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    });
+  }
+
   return (
     <>
       <section className="mb-20" id="tasks">
@@ -76,19 +90,23 @@ export default function TaskBoard() {
         )}
         <div className="container">
           <div className="p-2 flex justify-end">
-            <SearchTask />
+            <SearchTask onSearch={handleSearch} />
           </div>
           <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
             <TaskActions
               onAddClick={handleAddTask}
               onClickDeleteAll={handleDeleteAllTask}
             />
-            <TaskList
-              tasks={tasks}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-              onFav={handleFavoriteTask}
-            />
+            {tasks.length > 0 ? (
+              <TaskList
+                tasks={tasks}
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+                onFav={handleFavoriteTask}
+              />
+            ) : (
+              <NoTaskFound />
+            )}
           </div>
         </div>
       </section>
