@@ -100,8 +100,32 @@ export default function AddTaskModal({ onSave, taskToUpdate }) {
           >
             Save new Task
           </button>
+          <button
+            onClick={onCloseClick}
+            className="rounded bg-red-600 px-4 py-2 text-white transition-all hover:opacity-80"
+          >
+            Close
+          </button>
         </div>
       </form>
     </>
   );
 }
+
+//For edit Action
+// Every Task is in the task state
+//We pass the task state to Parent component (TaskBoard.jsx) by a callback function
+//In TaskBoard there is onEdit which have handleEditTask function
+// In the handleEdit task, he is getting the task which we sent from child component
+//Than we open the modal
+//Now we have to send the task details to modal So we created
+//a state called taskToUpdate
+//We pass the taskToUpdate to AddTaskModal
+//When we go to the Modal we take tasToUpdate as a prop
+//than we check if anyone wants to update a task than we initialize the
+//task state with taskToUpdate. If taskToUpdate is null than we initialize
+//the task state with a default task object
+//Than we make another state called isAdd to check it it is a add task or update task
+//we check if taskToUpdate is null than we set isAdd to true.So it will show "Add New Task"
+//If taskToUpdate is not null than we set isAdd to false. So it will show "Update Task"
+//Now we have to handle the change in the input fields
